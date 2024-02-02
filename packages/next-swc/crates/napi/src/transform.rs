@@ -28,7 +28,7 @@ DEALINGS IN THE SOFTWARE.
 
 use std::{
     cell::RefCell,
-    fs::read_to_string,
+    fs::{self, read_to_string},
     panic::{catch_unwind, AssertUnwindSafe},
     rc::Rc,
     sync::Arc,
@@ -185,6 +185,16 @@ pub fn transform(
 
     let task = TransformTask { c, input, options };
     Ok(AsyncTask::with_optional_signal(task, signal))
+}
+
+#[napi]
+pub fn test_file() -> napi::Result<String> {
+    let str = fs::read_to_string(std::path::PathBuf::from(
+        "/Users/ojkwon/github/next.js-upstream/test-file.txt",
+    ))
+    .expect("");
+
+    Ok(str)
 }
 
 #[napi]
